@@ -1,0 +1,92 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Little Birthday Surprise 🎂</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="card">
+
+            <div class="emoji">🎂</div>
+
+            <h1>A Little Birthday Surprise</h1>
+
+            <p class="intro">
+                As you know, Shahzain's birthday is coming up! 🎉
+            </p>
+
+            <p class="intro">
+                I'm collecting a few short messages from people who know him
+                so he can read them on his birthday.
+            </p>
+
+            <p class="hint">
+                It can be a simple birthday wish, a funny memory, an inside
+                joke, or just something you'd like to say to him. ❤️
+            </p>
+
+            <div id="messageForm">
+
+                <label>Your Name</label>
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your name"
+                    required
+                >
+
+                <label>Your Birthday Message 💌</label>
+                <textarea
+                    id="message"
+                    placeholder="Write a short birthday message..."
+                    required
+                ></textarea>
+
+                <label>What's your favorite thing about Shahzain? 😊</label>
+                <textarea
+                    id="favorite"
+                    placeholder="Something funny, sweet, annoying... anything!"
+                ></textarea>
+
+                <label>Any funny memory or inside joke? 👀</label>
+                <textarea
+                    id="memory"
+                    placeholder="Optional"
+                ></textarea>
+
+                <button onclick="submitMessage()">
+                    Send Birthday Wish 💌
+                </button>
+
+            </div>
+
+            <div id="success" class="success hidden">
+                <div class="success-icon">💖</div>
+
+                <h2>Thank you!</h2>
+
+                <p>
+                    Your message has been saved successfully.
+                </p>
+
+                <p>
+                    And remember... 🤫🎂
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+```
