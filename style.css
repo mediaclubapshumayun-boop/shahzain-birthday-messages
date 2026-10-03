@@ -1,0 +1,140 @@
+```css
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ffe4ec, #f7d9ff, #dfe7ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+.container {
+    width: 100%;
+    max-width: 650px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+}
+
+.emoji {
+    text-align: center;
+    font-size: 55px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+
+.intro,
+.hint {
+    text-align: center;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.hint {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 30px;
+}
+
+label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: 0.2s;
+}
+
+textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #c77dff;
+    box-shadow: 0 0 0 3px rgba(199, 125, 255, 0.15);
+}
+
+button {
+    width: 100%;
+    margin-top: 30px;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #c77dff, #ff7eb3);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(199, 125, 255, 0.3);
+}
+
+.success {
+    text-align: center;
+    padding: 30px 10px;
+}
+
+.success-icon {
+    font-size: 55px;
+    margin-bottom: 15px;
+}
+
+.success h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.success p {
+    color: #666;
+    margin: 8px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .card {
+        padding: 25px 20px;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+}
+```
