@@ -3,63 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shahzain's Birthday Wishes 🎂</title>
+    <title>Shahzain's Birthday Surprise! 🎁</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fef2f2; /* Soft Pink Background */
+            overflow-x: hidden;
+        }
+
+        /* Cute animated dashed border */
+        .cute-border {
+            border: 4px dashed #f472b6;
+            border-radius: 2rem;
+            position: relative;
+        }
+
+        /* Interactive Floating Hearts Animation */
+        @keyframes floatHeart {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+        .heart {
+            position: fixed;
+            bottom: -50px;
+            color: #ec4899;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 99;
+            animation: floatHeart 4s linear forwards;
+        }
+
+        /* Emoji Picker Styling */
+        #emoji-picker {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            background: white;
+            border: 2px solid #f472b6;
+            border-radius: 1rem;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 10;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+        #emoji-picker button {
+            font-size: 1.5rem;
+            padding: 5px;
+            border-radius: 0.5rem;
+            transition: background 0.2s;
+        }
+        #emoji-picker button:hover {
+            background-color: #fce7f3;
+        }
+    </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+<body class="text-slate-800 min-h-screen flex flex-col items-center justify-center p-6 relative">
 
-    <!-- USER FORM SECTION (Visible to Friends) -->
-    <div id="form-container" class="max-w-md w-full bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-amber-400">Shahzain's Birthday Surprise! 🎂</h1>
-            <p class="text-slate-400 text-sm mt-2">Leave a short note or birthday wish for Shahzain. We are collecting messages to build a special digital memory page for him!</p>
-            <span class="inline-block bg-amber-500/10 text-amber-400 text-xs px-2.5 py-1 rounded-full border border-amber-500/20 mt-3">🤫 Keep it a surprise!</span>
-        </div>
+    <!-- Title Header -->
+    <div class="text-center mb-10 w-full max-w-2xl">
+        <h1 class="text-5xl md:text-6xl font-extrabold text-pink-600 leading-tight">Shahzain's Birthday Surprise! <span class="whitespace-nowrap">🎁🎉</span></h1>
+        <p class="text-xl md:text-2xl text-pink-900 mt-4 font-medium px-4">Help us make a special memory card for Shahzain!</p>
+        <span class="inline-block bg-pink-100 text-pink-700 text-sm md:text-base px-4 py-1.5 rounded-full border border-pink-200 mt-5 font-semibold shadow-inner">🤫 Shhh... keep it a secret until his birthday!</span>
+    </div>
 
-        <form id="wish-form" class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-slate-300 mb-1">Your Name</label>
-                <input type="text" id="user-name" required placeholder="e.g. Ali, Hamza..." 
-                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-amber-400 transition">
+    <!-- MAIN FORM SECTION -->
+    <div id="form-container" class="max-w-xl w-full bg-white cute-border p-8 md:p-10 shadow-2xl relative">
+        
+        <form id="wish-form" class="space-y-6">
+            <!-- Name Input -->
+            <div class="space-y-2">
+                <label class="block text-xl font-bold text-pink-700">Your Cute Name ✨</label>
+                <input type="text" id="user-name" required placeholder="What should we call you?" 
+                    class="w-full text-lg md:text-xl bg-pink-50 border-2 border-pink-100 rounded-2xl px-6 py-4 text-slate-800 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-200 transition">
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-slate-300 mb-1">Birthday Note / Wish</label>
-                <textarea id="user-message" required rows="4" placeholder="Write your birthday message here..." 
-                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-amber-400 transition"></textarea>
+            <!-- Message Input with Emoji Button -->
+            <div class="space-y-2 relative">
+                <label class="block text-xl font-bold text-pink-700">Your Birthday Wish 🎂</label>
+                <textarea id="user-message" required rows="5" placeholder="Write something sweet or funny for Shahzain..." 
+                    class="w-full text-lg md:text-xl bg-pink-50 border-2 border-pink-100 rounded-2xl px-6 py-4 text-slate-800 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-200 transition"></textarea>
+                
+                <!-- Emoji Button -->
+                <button type="button" id="emoji-btn" class="absolute bottom-4 right-4 text-3xl opacity-70 hover:opacity-100 transition">😊</button>
+                
+                <!-- Simple Emoji Picker -->
+                <div id="emoji-picker">
+                    <button type="button">❤️</button><button type="button">🎉</button><button type="button">🎂</button><button type="button">🥳</button><button type="button">🎁</button>
+                    <button type="button">✨</button><button type="button">😂</button><button type="button">🤩</button><button type="button">🎈</button><button type="button">🍕</button>
+                </div>
             </div>
 
+            <!-- Submit Button -->
             <button type="submit" id="submit-btn" 
-                class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold py-3 rounded-xl transition shadow-lg shadow-amber-500/20">
-                Send Birthday Wish
+                class="w-full bg-pink-500 hover:bg-pink-600 text-white text-2xl font-bold py-5 rounded-3xl transition duration-300 shadow-lg shadow-pink-500/30 transform hover:scale-105">
+                Send Birthday Wish! 💖
             </button>
         </form>
 
-        <div id="success-msg" class="hidden text-center py-6 space-y-2">
-            <div class="text-4xl">🎉</div>
-            <h2 class="text-xl font-bold text-emerald-400">Wish Submitted!</h2>
-            <p class="text-slate-400 text-sm">Thank you for leaving a note for Shahzain.</p>
+        <!-- Success Message -->
+        <div id="success-msg" class="hidden text-center py-10 space-y-4">
+            <div class="text-7xl">🥳```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shahzain's Birthday Surprise! 🎁</title>
+    <!-- Tailwind CSS -->
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <style>
+        @import url('[https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap](https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap)');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fef2f2; /* Soft Pink Background */
+            overflow-x: hidden;
+        }
+
+        /* Cute animated dashed border */
+        .cute-border {
+            border: 4px dashed #f472b6;
+            border-radius: 2rem;
+            position: relative;
+        }
+
+        /* Interactive Floating Hearts Animation */
+        @keyframes floatHeart {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+        .heart {
+            position: fixed;
+            bottom: -50px;
+            color: #ec4899;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 99;
+            animation: floatHeart 4s linear forwards;
+        }
+
+        /* Emoji Picker Styling */
+        #emoji-picker {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            background: white;
+            border: 2px solid #f472b6;
+            border-radius: 1rem;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 10;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+        #emoji-picker button {
+            font-size: 1.5rem;
+            padding: 5px;
+            border-radius: 0.5rem;
+            transition: background 0.2s;
+        }
+        #emoji-picker button:hover {
+            background-color: #fce7f3;
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col items-center justify-center p-6 relative">
+
+    <!-- Title Header -->
+    <div class="text-center mb-10 w-full max-w-2xl">
+        <h1 class="text-5xl md:text-6xl font-extrabold text-pink-600 leading-tight">Shahzain's Birthday Surprise! <span class="whitespace-nowrap">🎁🎉</span></h1>
+        <p class="text-xl md:text-2xl text-pink-900 mt-4 font-medium px-4">Help us make a special memory card for Shahzain!</p>
+        <span class="inline-block bg-pink-100 text-pink-700 text-sm md:text-base px-4 py-1.5 rounded-full border border-pink-200 mt-5 font-semibold shadow-inner">🤫 Shhh... keep it a secret until his birthday!</span>
+    </div>
+
+    <!-- MAIN FORM SECTION -->
+    <div id="form-container" class="max-w-xl w-full bg-white cute-border p-8 md:p-10 shadow-2xl relative">
+        
+        <form id="wish-form" class="space-y-6">
+            <!-- Name Input -->
+            <div class="space-y-2">
+                <label class="block text-xl font-bold text-pink-700">Your Cute Name ✨</label>
+                <input type="text" id="user-name" required placeholder="What should we call you?" 
+                    class="w-full text-lg md:text-xl bg-pink-50 border-2 border-pink-100 rounded-2xl px-6 py-4 text-slate-800 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-200 transition">
+            </div>
+
+            <!-- Message Input with Emoji Button -->
+            <div class="space-y-2 relative">
+                <label class="block text-xl font-bold text-pink-700">Your Birthday Wish 🎂</label>
+                <textarea id="user-message" required rows="5" placeholder="Write something sweet or funny for Shahzain..." 
+                    class="w-full text-lg md:text-xl bg-pink-50 border-2 border-pink-100 rounded-2xl px-6 py-4 text-slate-800 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-200 transition"></textarea>
+                
+                <!-- Emoji Button -->
+                <button type="button" id="emoji-btn" class="absolute bottom-4 right-4 text-3xl opacity-70 hover:opacity-100 transition">😊</button>
+                
+                <!-- Simple Emoji Picker -->
+                <div id="emoji-picker">
+                    <button type="button">❤️</button><button type="button">🎉</button><button type="button">🎂</button><button type="button">🥳</button><button type="button">🎁</button>
+                    <button type="button">✨</button><button type="button">😂</button><button type="button">🤩</button><button type="button">🎈</button><button type="button">🍕</button>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="submit-btn" 
+                class="w-full bg-pink-500 hover:bg-pink-600 text-white text-2xl font-bold py-5 rounded-3xl transition duration-300 shadow-lg shadow-pink-500/30 transform hover:scale-105">
+                Send Birthday Wish! 💖
+            </button>
+        </form>
+
+        <!-- Success Message -->
+        <div id="success-msg" class="hidden text-center py-10 space-y-4">
+            <div class="text-7xl">🥳</div>
+            <h2 class="text-3xl font-bold text-emerald-600">Wish Submitted!</h2>
+            <p class="text-xl text-slate-600 font-medium">Thank you for leaving a note for Shahzain. It's stored safely!</p>
         </div>
     </div>
 
     <!-- SECRET ADMIN DASHBOARD (Only for You) -->
-    <div id="admin-container" class="hidden max-w-2xl w-full bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl mt-6">
-        <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
-            <h2 class="text-xl font-bold text-amber-400">🔒 Secret Admin Dashboard</h2>
-            <button onclick="toggleAdmin(false)" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300">Close</button>
+    <div id="admin-container" class="hidden max-w-4xl w-full bg-white cute-border p-8 md:p-10 shadow-2xl mt-10">
+        <div class="flex justify-between items-center mb-8 border-b-2 border-pink-100 pb-5">
+            <h2 class="text-3xl font-bold text-pink-600">🔒 Secret Admin Dashboard</h2>
+            <button onclick="toggleAdmin(false)" class="text-sm bg-slate-200 hover:bg-slate-300 px-4 py-2 rounded-xl text-slate-700 font-semibold transition">Close</button>
         </div>
-        <div id="wishes-list" class="space-y-3">
-            <p class="text-slate-500 text-center">No wishes submitted yet.</p>
+        <div id="wishes-list" class="space-y-5">
+            <p class="text-slate-500 text-center py-6 text-lg">No wishes submitted yet on this browser.</p>
         </div>
     </div>
 
     <!-- Admin Access Link -->
-    <button onclick="checkAdminPassword()" class="mt-8 text-xs text-slate-600 hover:text-slate-400 transition">Admin Access 🔑</button>
+    <button onclick="checkAdminPassword()" class="mt-12 text-sm text-pink-300 hover:text-pink-500 transition font-medium">Admin Access 🔑</button>
 
     <script>
         // Set your secret admin password here
         const ADMIN_PASSWORD = "mysecretpassword123";
+
+        // Emoji Picker Logic
+        const emojiBtn = document.getElementById('emoji-btn');
+        const emojiPicker = document.getElementById('emoji-picker');
+        const userMessage = document.getElementById('user-message');
+
+        emojiBtn.addEventListener('click', () => {
+            emojiPicker.style.display = emojiPicker.style.display === 'grid' ? 'none' : 'grid';
+        });
+
+        emojiPicker.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                userMessage.value += e.target.innerText;
+                emojiPicker.style.display = 'none'; // Close picker after selection
+                userMessage.focus(); // Keep focus on textarea
+            }
+        });
+
+        // Interactive Heart Animation
+        function createHearts() {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    heart.innerText = ['❤️', '💖', '💗', '💓'][Math.floor(Math.random() * 4)];
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    document.body.appendChild(heart);
+                    
+                    // Remove heart after animation ends
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 4000);
+                }, i * 150);
+            }
+        }
 
         // Save submitted wish locally
         document.getElementById('wish-form').addEventListener('submit', (e) => {
@@ -83,6 +301,9 @@
 
             // Save updated array
             localStorage.setItem('shahzain_wishes', JSON.stringify(existingWishes));
+
+            // Run interactive animation
+            createHearts();
 
             // Show success screen
             document.getElementById('wish-form').classList.add('hidden');
@@ -115,19 +336,19 @@
             const wishes = JSON.parse(localStorage.getItem('shahzain_wishes') || '[]');
 
             if (wishes.length === 0) {
-                wishesList.innerHTML = `<p class="text-slate-500 text-center py-4">No wishes submitted yet on this browser.</p>`;
+                wishesList.innerHTML = `<p class="text-slate-500 text-center py-6 text-lg">No wishes submitted yet on this browser.</p>`;
                 return;
             }
 
             wishesList.innerHTML = "";
             wishes.forEach((item) => {
                 const card = `
-                    <div class="bg-slate-900 border border-slate-700/60 p-4 rounded-xl space-y-2">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-semibold text-amber-300">${escapeHtml(item.name)}</h3>
-                            <span class="text-xs text-slate-500">${item.date}</span>
+                    <div class="bg-pink-50 border-2 border-pink-100 p-6 rounded-2xl space-y-3 shadow-sm">
+                        <div class="flex justify-between items-start gap-4">
+                            <h3 class="text-2xl font-bold text-pink-700">${escapeHtml(item.name)} ✨</h3>
+                            <span class="text-sm text-pink-400 font-medium whitespace-nowrap">${item.date}</span>
                         </div>
-                        <p class="text-slate-300 text-sm whitespace-pre-wrap">${escapeHtml(item.message)}</p>
+                        <p class="text-lg md:text-xl text-slate-700 whitespace-pre-wrap leading-relaxed">${escapeHtml(item.message)}</p>
                     </div>
                 `;
                 wishesList.innerHTML += card;
