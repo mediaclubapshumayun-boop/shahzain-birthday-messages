@@ -57,16 +57,10 @@
         <p class="text-lg md:text-xl text-slate-300 font-normal">
             Leave a note or birthday wish below!
         </p>
-        <div class="pt-2">
-            <span class="inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 text-xs md:text-sm px-3.5 py-1.5 rounded-full border border-emerald-500/20 font-medium">
-                <span></span> 
-            </span>
-        </div>
     </div>
 
     <!-- MAIN FORM CONTAINER -->
     <div id="form-container" class="max-w-xl w-full glass-card rounded-2xl p-6 md:p-8 shadow-2xl relative">
-        
         <form id="wish-form" class="space-y-6">
             <!-- Name Input -->
             <div class="space-y-2">
@@ -108,7 +102,7 @@
         </div>
     </div>
 
-    <!-- SECRET ADMIN DASHBOARD (Only for You) -->
+    <!-- SECRET ADMIN DASHBOARD -->
     <div id="admin-container" class="hidden max-w-3xl w-full glass-card rounded-2xl p-6 md:p-8 shadow-2xl mt-8">
         <div class="flex justify-between items-center mb-6 border-b border-slate-700/80 pb-4">
             <h2 class="text-2xl font-bold text-emerald-400 flex items-center gap-2">
@@ -119,7 +113,7 @@
             </button>
         </div>
         <div id="wishes-list" class="space-y-4">
-            <p class="text-slate-400 text-center py-6">No wishes submitted yet on this browser.</p>
+            <p class="text-slate-400 text-center py-6">Loading wishes...</p>
         </div>
     </div>
 
@@ -128,11 +122,29 @@
         Admin Access 🔑
     </button>
 
-    <script>
-        // Secret password set here
+    <!-- Firebase Realtime Database SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Aap ki updated Firebase config keys
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4Jg19-EQo2sFYXX2scWJt9VhdMCCspuQ",
+            authDomain: "shahzain-bday.firebaseapp.com",
+            databaseURL: "https://shahzain-bday-default-rtdb.firebaseio.com",
+            projectId: "shahzain-bday",
+            storageBucket: "shahzain-bday.firebasestorage.app",
+            messagingSenderId: "66737301306",
+            appId: "1:66737301306:web:b6750bca3c1692965b1203",
+            measurementId: "G-EPGS5DY5HV"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
         const ADMIN_PASSWORD = "mysecretpassword123";
 
-        // Interactive Emoji Picker Logic
+        // Emoji Picker Logic
         const emojiBtn = document.getElementById('emoji-btn');
         const emojiPicker = document.getElementById('emoji-picker');
         const userMessage = document.getElementById('user-message');
@@ -142,7 +154,6 @@
             emojiPicker.style.display = emojiPicker.style.display === 'grid' ? 'none' : 'grid';
         });
 
-        // Close emoji picker on click outside
         document.addEventListener('click', (e) => {
             if (!emojiPicker.contains(e.target) && e.target !== emojiBtn) {
                 emojiPicker.style.display = 'none';
@@ -157,33 +168,36 @@
             }
         });
 
-        // Save submitted wish locally
-        document.getElementById('wish-form').addEventListener('submit', (e) => {
+        // Save Wish to Realtime Database
+        document.getElementById('wish-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.innerText = "Sending...";
+            submitBtn.disabled = true;
 
             const name = document.getElementById('user-name').value.trim();
             const message = document.getElementById('user-message').value.trim();
 
-            if(!name || !message) return;
+            try {
+                const wishesRef = ref(db, 'wishes');
+                await push(wishesRef, {
+                    name: name,
+                    message: message,
+                    createdAt: new Date().toLocaleString()
+                });
 
-            const newWish = {
-                id: Date.now(),
-                name: name,
-                message: message,
-                date: new Date().toLocaleString()
-            };
-
-            const existingWishes = JSON.parse(localStorage.getItem('shahzain_wishes') || '[]');
-            existingWishes.unshift(newWish);
-
-            localStorage.setItem('shahzain_wishes', JSON.stringify(existingWishes));
-
-            document.getElementById('wish-form').classList.add('hidden');
-            document.getElementById('success-msg').classList.remove('hidden');
+                document.getElementById('wish-form').classList.add('hidden');
+                document.getElementById('success-msg').classList.remove('hidden');
+            } catch (error) {
+                alert("Error sending wish: " + error.message);
+                submitBtn.innerText = "Send Birthday Wish 🚀";
+                submitBtn.disabled = false;
+            }
         });
 
-        // Admin verification and list view
-        function checkAdminPassword() {
+        // Admin Dashboard Functions
+        window.checkAdminPassword = function() {
             const pass = prompt("Enter Admin Password:");
             if (pass === ADMIN_PASSWORD) {
                 toggleAdmin(true);
@@ -191,9 +205,9 @@
             } else if (pass !== null) {
                 alert("Incorrect Password!");
             }
-        }
+        };
 
-        function toggleAdmin(show) {
+        window.toggleAdmin = function(show) {
             const adminBox = document.getElementById('admin-container');
             if (show) {
                 adminBox.classList.remove('hidden');
@@ -201,30 +215,40 @@
             } else {
                 adminBox.classList.add('hidden');
             }
-        }
+        };
 
-        function loadWishes() {
+        async function loadWishes() {
             const wishesList = document.getElementById('wishes-list');
-            const wishes = JSON.parse(localStorage.getItem('shahzain_wishes') || '[]');
+            wishesList.innerHTML = `<p class="text-slate-400 text-center py-6">Loading wishes...</p>`;
 
-            if (wishes.length === 0) {
-                wishesList.innerHTML = `<p class="text-slate-400 text-center py-6">No wishes submitted yet on this browser.</p>`;
-                return;
+            try {
+                const dbRef = ref(db);
+                const snapshot = await get(child(dbRef, 'wishes'));
+
+                if (snapshot.exists()) {
+                    wishesList.innerHTML = "";
+                    const data = snapshot.val();
+                    
+                    const wishesArray = Object.values(data).reverse();
+
+                    wishesArray.forEach((item) => {
+                        const card = `
+                            <div class="bg-slate-900/90 border border-slate-700/80 p-5 rounded-xl space-y-2">
+                                <div class="flex justify-between items-start gap-4">
+                                    <h3 class="text-xl font-bold text-emerald-400">${escapeHtml(item.name)}</h3>
+                                    <span class="text-xs text-slate-500 font-medium whitespace-nowrap">${item.createdAt}</span>
+                                </div>
+                                <p class="text-base text-slate-200 whitespace-pre-wrap leading-relaxed">${escapeHtml(item.message)}</p>
+                            </div>
+                        `;
+                        wishesList.innerHTML += card;
+                    });
+                } else {
+                    wishesList.innerHTML = `<p class="text-slate-400 text-center py-6">No wishes submitted yet.</p>`;
+                }
+            } catch (err) {
+                wishesList.innerHTML = `<p class="text-red-400 text-center py-6">Error loading wishes!</p>`;
             }
-
-            wishesList.innerHTML = "";
-            wishes.forEach((item) => {
-                const card = `
-                    <div class="bg-slate-900/90 border border-slate-700/80 p-5 rounded-xl space-y-2">
-                        <div class="flex justify-between items-start gap-4">
-                            <h3 class="text-xl font-bold text-emerald-400">${escapeHtml(item.name)}</h3>
-                            <span class="text-xs text-slate-500 font-medium whitespace-nowrap">${item.date}</span>
-                        </div>
-                        <p class="text-base text-slate-200 whitespace-pre-wrap leading-relaxed">${escapeHtml(item.message)}</p>
-                    </div>
-                `;
-                wishesList.innerHTML += card;
-            });
         }
 
         function escapeHtml(str) {
